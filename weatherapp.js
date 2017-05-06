@@ -15,6 +15,15 @@ var APIPrefix = "http://api.openweathermap.org/data/2.5/forecast/daily?q="
 var APIKey = "e088f9ea8ecf5826cbe251b88a835822";
 var countrySelected = '';
 var citySelected = '';
+var weekday = new Array(7);
+weekday[0] =  "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
+
 $(document).ready(function(){
   listenForFormSubmit();
 
@@ -73,23 +82,31 @@ showForecast(cityName,countryName,forecastInfo)
 }
 
 function showForecast(city,country,forecast){
+
+  var d = new Date()
+  var date = d.getDate()
+  var month = d.getMonth() + 1;
+  var jour = d.getDay()
   var $cityName = $('<h2>').appendTo('.city_info').text(city +','+ country);
 
-  forecast.forEach(function(cast){
-    var $day = $('<li>').addClass('day_weather').appendTo('.forecast_list')
+    for(i=0; i<forecast.length;i++){
+        var $day = $('<li>').addClass('day_weather').appendTo('.forecast_list')
 
-    var $date = $('<p>').appendTo($day).text('Date goes here')
+        var $dateWrap = $('<div>').addClass('date_wrap').appendTo($day)
+        var $jour = $('<p>').appendTo($dateWrap).text(weekday[jour + i])
+        var $date = $('<p>').appendTo($dateWrap).text(month +'/'+ (date+i))
 
-    var $image = $('<img>').attr('src','http://openweathermap.org/img/w/'+ cast.icon +'.png').appendTo($day);
+        var $image = $('<img>').attr('src','http://openweathermap.org/img/w/'+ forecast[i].icon +'.png').appendTo($day);
 
-    var $tempWrap = $('<div>').addClass('temp_wrap').appendTo($day)
-    var $high = $('<p>').addClass('high').appendTo($tempWrap).text(cast.dayHigh)
-    var $low = $('<p>').addClass('low').appendTo($tempWrap).text(cast.dayLow)
-    var $description = $('<p>').addClass('weather_description').appendTo($tempWrap).text(cast.description)
+        var $tempWrap = $('<div>').addClass('temp_wrap').appendTo($day)
+        var $high = $('<p>').addClass('high').appendTo($tempWrap).text(forecast[i].dayHigh+'°C')
+        var $low = $('<p>').addClass('low').appendTo($tempWrap).text(forecast[i].dayLow+'°C')
+        var $description = $('<p>').addClass('weather_description').appendTo($tempWrap).text(forecast[i].description)
 
-    var $atmosphere = $('<div>').addClass('atmosphere').appendTo($day)
-    var $pressure = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(cast.pressure)
-    var $humidity = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(cast.humidity +'%')
+        var $atmosphere = $('<div>').addClass('atmosphere').appendTo($day)
+        var $pressure = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].pressure +'hPa')
+        var $humidity = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].humidity +'%')
 
-  })
+    }
+
 }
