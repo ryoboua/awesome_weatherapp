@@ -87,18 +87,19 @@ function showForecast(city,country,forecast){
   var date = d.getDate()
   var month = d.getMonth() + 1;
   var jour = d.getDay()
-  var $cityName = $('<h2>').appendTo('.city_info').text(city +','+ country);
+  var $cityName = $('<h2>').addClass('city_title').appendTo('.city_info').text(city +','+ country);
 
     for(i=0; i<forecast.length;i++){
         var $day = $('<li>').addClass('day_weather').appendTo('.forecast_list')
-
+console.log(weekday[jour + i])
         var $dateWrap = $('<div>').addClass('date_wrap').appendTo($day)
-        var $jour = $('<p>').appendTo($dateWrap).text(weekday[jour + i])
+        var $jour = $('<p>').appendTo($dateWrap).text('weekday')
         var $date = $('<p>').appendTo($dateWrap).text(month +'/'+ (date+i))
 
-        var $image = $('<img>').attr('src','http://openweathermap.org/img/w/'+ forecast[i].icon +'.png').appendTo($day);
+        var $weatherWrap = $('<div>').addClass('weather').appendTo($day)
+        var $image = $('<img>').attr('src','http://openweathermap.org/img/w/'+ forecast[i].icon +'.png').addClass("weather_image").appendTo($weatherWrap);
 
-        var $tempWrap = $('<div>').addClass('temp_wrap').appendTo($day)
+        var $tempWrap = $('<div>').addClass('temp_wrap').appendTo($weatherWrap)
         var $high = $('<p>').addClass('high').appendTo($tempWrap).text(forecast[i].dayHigh+'°C')
         var $low = $('<p>').addClass('low').appendTo($tempWrap).text(forecast[i].dayLow+'°C')
         var $description = $('<p>').addClass('weather_description').appendTo($tempWrap).text(forecast[i].description)

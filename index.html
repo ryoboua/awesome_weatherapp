@@ -7,17 +7,17 @@
     <meta name="author" content="Reggie">
 		<link rel="stylesheet" type="text/css" href="normalize.css"/>
 		<link rel="stylesheet" type="text/css" href="weatherapp.css"/>
+		<link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet">
 
-		<title>weatherapp</title>
+
+		<title>Awesome WeatherApp</title>
 </head>
 <body>
 	<header>
-			<h1 class="title">weatherapp</h1>
-	</header>
+			<h1 class="title">Awesome WeatherApp</h1>
 	<section>
-		<div class="control-group">
-					<label for="select-country">Country:</label>
-					<select id="select-country" class="demo-default" placeholder="Select a country...">
+		<div class="country_selector">
+					<select id="select-country" placeholder="Select a country...">
 					    <option value="">Select a country...</option>
 							<option value="AF">Afghanistan</option>
 					    <option value="AX">&Aring;land Islands</option>
@@ -270,8 +270,9 @@
 	</section>
 	<form action="" autocomplete="off">
 					<input class="input_text" type="text" name="citysearch" value="Toronto" placeholder="Enter A City">
-					<input class="button" type="submit" value="SEARCH" >
+					<input class="button" type="submit" value="Search" >
 	</form>
+</header>
 	<section class="forecast_wrap">
 		<div class="city_info"></div>
 		<ul class="forecast_list"></ul>
@@ -280,7 +281,7 @@
 
 <footer>
 		<script type="text/javascript" src="jquery-1.8.3.min.js"></script>
-		<!-- <script type="text/javascript" src="city.list.js"></script> -->
+		<!-- <script src="https://use.fontawesome.com/0601c0f6df.js"></script> -->
 		<script type="text/javascript" src="weatherapp.js"></script>
 </footer>
 </html>

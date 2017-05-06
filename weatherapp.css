@@ -1,0 +1,83 @@
+body{margin: 0; padding: 0; font-size: 16px; font-family: 'Noto Sans', sans-serif; background-color: #F1F1F1; }
+
+header{background-color:#2670AF; }
+
+h1{
+  color: white;
+  text-align: center;
+}
+.country_selector{
+  text-align: center;
+padding-bottom: 1em;
+}
+#select-country{
+  width: 185px;
+  color: white;
+  background-color: #2670AF;
+  border-style: none;
+}
+#select-country:focus{
+  border: 2px solid white;
+}
+
+form{
+  text-align: center;
+  padding-bottom: 1em;
+}
+
+.input_text{
+  color: white;
+  background-color: #2670AF;
+  border-bottom: : 2px solid black;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+}
+
+.button{
+  background-color: #2670AF;
+  border-style: none;
+  color: white;
+}
+.forecast_wrap{
+  margin: 1em auto;
+	width: 95%;
+	background-color: #FFFFFF;
+	box-shadow: 0px 10px 10px rgba(0,0,0, 0.2);
+}
+
+
+.city_info{
+  text-align: right;
+}
+.city_title{
+  padding-right: 1em;
+  padding-top: 1em;
+}
+.forecast_list{
+  text-align: center;
+  padding: 0px 10px;
+}
+
+.day_weather{
+  list-style: none;
+  padding: 0px 10px;
+  display: flex;
+}
+.day_weather:nth-child(2n){
+	background-color: #F1F1F1;
+	border-top: 1px solid grey;
+	border-bottom: 1px solid grey;
+}
+
+.date_wrap, .atmosphere{
+  font-size: 12px;
+}
+
+
+.weather_image{
+  height: 60px;
+}
+.weather{
+  display: flex;
+}
