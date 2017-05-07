@@ -26,7 +26,10 @@ weekday[6] = "Saturday";
 
 $(document).ready(function(){
   listenForFormSubmit();
-  listenForClick()
+listenForClick()
+
+
+
 })
 
 
@@ -140,7 +143,14 @@ function listenForClick(){
 }
 
 function weatherSlideToggle(){
-  $('.details').slideToggle();
+
+$('.details').slideUp();
+//$(this).find(".details").slideToggle("slow")
+
+($(this).find(".details").is(':visible')) ? $(this).find(".details").slideUp() : $(this).find(".details").slideDown()
+
+
+
 }
 
 function reset(){
