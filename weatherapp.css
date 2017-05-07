@@ -63,6 +63,7 @@ form{
   list-style: none;
   padding: 0px 10px;
   display: flex;
+  flex-wrap: wrap;
 }
 .day_weather:nth-child(2n){
 	background-color: #F1F1F1;
@@ -72,6 +73,7 @@ form{
 
 .date_wrap, .atmosphere{
   font-size: 12px;
+  flex-basis: 20%;
 }
 
 
@@ -80,4 +82,15 @@ form{
 }
 .weather{
   display: flex;
+  flex-basis: 60%;
+  justify-content: center;
+}
+
+.high{
+  font-weight: 700;
+}
+
+.details{
+  flex-basis: 100%;
+  display: none;
 }

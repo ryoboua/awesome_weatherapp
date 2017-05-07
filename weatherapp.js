@@ -26,7 +26,7 @@ weekday[6] = "Saturday";
 
 $(document).ready(function(){
   listenForFormSubmit();
-
+  listenForClick()
 })
 
 
@@ -41,10 +41,9 @@ function listenForFormSubmit(){
 
 function handleSubmit(e){
   e.preventDefault();
-
+  reset()
   citySelected = $(".input_text")[0].value;
   console.log(citySelected);
-
   getWeather(citySelected,countrySelected);
 }
 
@@ -68,15 +67,20 @@ var forecastInfo = []
 
   for(i=0; i<7;i++){
     var day = {
-      dayHigh: weather.list[i].temp.max,
-      dayLow: weather.list[i].temp.min,
+      dayHigh: Math.round(weather.list[i].temp.max),
+      dayLow: Math.round(weather.list[i].temp.min),
       description: weather.list[i].weather[0].description,
       icon: weather.list[i].weather[0].icon,
-      pressure: weather.list[i].pressure,
-      humidity: weather.list[i].humidity
+      pressure: Math.round(weather.list[i].pressure),
+      humidity: weather.list[i].humidity,
+      morning: Math.round(weather.list[i].temp.morn),
+      afternoon: Math.round(weather.list[i].temp.day),
+      evening: Math.round(weather.list[i].temp.eve),
+      overnight: Math.round(weather.list[i].temp.night)
     }
     forecastInfo.push(day);
   }
+
 console.log(forecastInfo)
 showForecast(cityName,countryName,forecastInfo)
 }
@@ -91,9 +95,11 @@ function showForecast(city,country,forecast){
 
     for(i=0; i<forecast.length;i++){
         var $day = $('<li>').addClass('day_weather').appendTo('.forecast_list')
-console.log(weekday[jour + i])
+
+        var temp = weekdayCounter(jour,i)
+
         var $dateWrap = $('<div>').addClass('date_wrap').appendTo($day)
-        var $jour = $('<p>').appendTo($dateWrap).text('weekday')
+        var $jour = $('<p>').appendTo($dateWrap).text(weekday[temp])
         var $date = $('<p>').appendTo($dateWrap).text(month +'/'+ (date+i))
 
         var $weatherWrap = $('<div>').addClass('weather').appendTo($day)
@@ -108,6 +114,36 @@ console.log(weekday[jour + i])
         var $pressure = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].pressure +'hPa')
         var $humidity = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].humidity +'%')
 
+      /// adding more details
+
+      var $details = $('<div>').addClass('details').appendTo($day)
+
+      //var $detail_child = $('<div>').addClass('detail_child').appendTo($details)
+
+      var $morning = $('<p>').addClass('day_temp').appendTo($details).text('Morn ' + forecast[i].morning+'°C')
+      var $afternoon = $('<p>').addClass('day_temp').appendTo($details).text('Day ' + forecast[i].afternoon+'°C')
+      var $evening = $('<p>').addClass('day_temp').appendTo($details).text('Eve ' + forecast[i].evening+'°C')
+      var $overnight = $('<p>').addClass('day_temp').appendTo($details).text('Night ' + forecast[i].overnight+'°C')
+
+
     }
 
+}
+
+function weekdayCounter(day,count){
+  if ((day+count) >= 7) return (day+count) - 7
+  return day + count
+}
+
+function listenForClick(){
+   $('.forecast_list').on('click','.day_weather',weatherSlideToggle);
+}
+
+function weatherSlideToggle(){
+  $('.details').slideToggle();
+}
+
+function reset(){
+  $('.city_info').empty()
+  $('.forecast_list').empty()
 }
