@@ -1,22 +1,10 @@
-// function countryList (citylist,pick){
-//
-// selectedCountry = citylist.filter(function(x){
-//   return x.country === pick
-// })
-// var cityselected = selectedCountry.filter(function(y){
-//   return y.name === "Toronto"
-// })
-// console.log(cityselected)
-// };
-// countryList(city,"CA")
 
-//api.openweathermap.org/data/2.5/forecast/daily?q={city name},{country code}&cnt={cnt}
 var APIPrefix = "http://api.openweathermap.org/data/2.5/forecast/daily?q="
 var APIKey = "e088f9ea8ecf5826cbe251b88a835822";
 var countrySelected = '';
 var citySelected = '';
 var weekday = new Array(7);
-weekday[0] =  "Sunday";
+weekday[0] = "Sunday";
 weekday[1] = "Monday";
 weekday[2] = "Tuesday";
 weekday[3] = "Wednesday";
@@ -25,18 +13,24 @@ weekday[5] = "Friday";
 weekday[6] = "Saturday";
 
 $(document).ready(function(){
+  listenForCountrySelect()
   listenForFormSubmit();
-listenForClick()
-
-
-
+  listenForClick()
 })
 
+function listenForCountrySelect(){
+  $('#select-country').change(function(){
+    countrySelected = this.value;
 
-$('#select-country').change(function(){
-  countrySelected = this.value;
-  console.log(countrySelected);
-})
+    if(countrySelected !== '') {
+      $('form').show();
+    } else {
+        $('form').hide();
+    }
+
+  })
+
+}
 
 function listenForFormSubmit(){
   $('form').on('submit',handleSubmit);
@@ -46,7 +40,6 @@ function handleSubmit(e){
   e.preventDefault();
   reset()
   citySelected = $(".input_text")[0].value;
-  console.log(citySelected);
   getWeather(citySelected,countrySelected);
 }
 
@@ -84,7 +77,6 @@ var forecastInfo = []
     forecastInfo.push(day);
   }
 
-console.log(forecastInfo)
 showForecast(cityName,countryName,forecastInfo)
 }
 
@@ -94,6 +86,7 @@ function showForecast(city,country,forecast){
   var date = d.getDate()
   var month = d.getMonth() + 1;
   var jour = d.getDay()
+  var sevenday = $('<h2>').addClass('seven').appendTo('.city_info').text('7 Day Forcast');
   var $cityName = $('<h2>').addClass('city_title').appendTo('.city_info').text(city +','+ country);
 
     for(i=0; i<forecast.length;i++){
@@ -114,23 +107,22 @@ function showForecast(city,country,forecast){
         var $description = $('<p>').addClass('weather_description').appendTo($tempWrap).text(forecast[i].description)
 
         var $atmosphere = $('<div>').addClass('atmosphere').appendTo($day)
-        var $pressure = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].pressure +'hPa')
+        var $pressure = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].pressure +' hPa')
         var $humidity = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].humidity +'%')
 
       /// adding more details
 
-      var $details = $('<div>').addClass('details').appendTo($day)
+        var $details = $('<div>').addClass('details').appendTo($day)
 
       //var $detail_child = $('<div>').addClass('detail_child').appendTo($details)
 
-      var $morning = $('<p>').addClass('day_temp').appendTo($details).text('Morn ' + forecast[i].morning+'°C')
-      var $afternoon = $('<p>').addClass('day_temp').appendTo($details).text('Day ' + forecast[i].afternoon+'°C')
-      var $evening = $('<p>').addClass('day_temp').appendTo($details).text('Eve ' + forecast[i].evening+'°C')
-      var $overnight = $('<p>').addClass('day_temp').appendTo($details).text('Night ' + forecast[i].overnight+'°C')
-
+        var $morning = $('<p>').addClass('day_temp').appendTo($details).text('Morn ' + forecast[i].morning+'°C')
+        var $afternoon = $('<p>').addClass('day_temp').appendTo($details).text('Day ' + forecast[i].afternoon+'°C')
+        var $evening = $('<p>').addClass('day_temp').appendTo($details).text('Eve ' + forecast[i].evening+'°C')
+        var $overnight = $('<p>').addClass('day_temp').appendTo($details).text('Night ' + forecast[i].overnight+'°C')
 
     }
-
+      var $averagePressure = $('<h3>').addClass('average_pressure').appendTo('.city_info').text("Average Weekly Pressure "+averageWeeklyPressure(forecast)+' hPa');
 }
 
 function weekdayCounter(day,count){
@@ -143,12 +135,9 @@ function listenForClick(){
 }
 
 function weatherSlideToggle(){
-
-$('.details').slideUp();
-//$(this).find(".details").slideToggle("slow")
-
-($(this).find(".details").is(':visible')) ? $(this).find(".details").slideUp() : $(this).find(".details").slideDown()
-
+  $('.details').slideUp();
+  $('.day_weather').removeClass('selected');
+  ($(this).find(".details").is(':visible')) ? $(this).find(".details").slideUp() && $(this).removeClass('selected') : $(this).find(".details").slideDown() && $(this).addClass('selected');
 
 
 }
@@ -156,4 +145,14 @@ $('.details').slideUp();
 function reset(){
   $('.city_info').empty()
   $('.forecast_list').empty()
+}
+
+function averageWeeklyPressure(forecast){
+  var x = 0;
+  var pressure = 0;
+  while(x<7){
+    pressure += forecast[x].pressure
+    x++
+  }
+  return Math.round(pressure / 7)
 }

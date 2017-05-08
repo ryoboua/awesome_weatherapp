@@ -1,6 +1,10 @@
 body{margin: 0; padding: 0; font-size: 16px; font-family: 'Noto Sans', sans-serif; background-color: #F1F1F1; }
 
-header{background-color:#2670AF; }
+header{
+  background-color:#2670AF;
+  min-height: 140px;
+  padding-top: 1em;
+}
 
 h1{
   color: white;
@@ -15,16 +19,21 @@ padding-bottom: 1em;
   color: white;
   background-color: #2670AF;
   border-style: none;
+
 }
 #select-country:focus{
   border: 2px solid white;
 }
 
 form{
+  display: none;
   text-align: center;
   padding-bottom: 1em;
 }
-
+.input_text::placeholder{
+  color: #ECEFF4;
+;
+}
 .input_text{
   color: white;
   background-color: #2670AF;
@@ -44,15 +53,34 @@ form{
 	width: 95%;
 	background-color: #FFFFFF;
 	box-shadow: 0px 10px 10px rgba(0,0,0, 0.2);
+  min-height: 600px;
 }
-
+.seven{
+  text-align: left;
+  flex-basis: 44%;
+  padding-top: 1em;
+  padding-left: 1em;
+  font-size: 16px;
+}
 
 .city_info{
   text-align: right;
+  display: flex;
+  flex-wrap: wrap;
+  /*border-bottom: 2px solid black;*/
 }
 .city_title{
   padding-right: 1em;
   padding-top: 1em;
+  flex-basis: 45%;
+  font-size: 16px;
+}
+
+.average_pressure{
+  padding-right: 1em;
+  flex-basis: 100%;
+  font-size: 14px;
+
 }
 .forecast_list{
   text-align: center;
@@ -64,8 +92,12 @@ form{
   padding: 0px 10px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
-.day_weather:nth-child(2n){
+.day_weather:not(:last-child){
+  border-bottom: 2px solid black;
+}
+.selected{
 	background-color: #F1F1F1;
 	border-top: 1px solid grey;
 	border-bottom: 1px solid grey;
@@ -82,7 +114,7 @@ form{
 }
 .weather{
   display: flex;
-  flex-basis: 60%;
+  flex-basis: 59%;
   justify-content: center;
 }
 
@@ -93,4 +125,64 @@ form{
 .details{
   flex-basis: 100%;
   display: none;
+}
+
+.day_temp{
+  display: inline-block;
+  padding: 0 6px;
+}
+
+.day_temp:not(:first-child):not(:last-child){
+  border-left:  0.5px solid black;
+
+  border-right: 0.5px solid black;
+}
+
+@media (min-width: 600px){
+  .seven, .city_title{
+    font-size: 1.5em;
+    }
+
+  .average_pressure{
+    font-size: 1em;
+  }
+
+  .seven{
+    flex-basis: 46%;
+  }
+
+  .date_wrap, .atmosphere{
+    font-size: 1em;
+    flex-basis: 20%;
+  }
+  .temp_wrap{
+    font-size: 1.2em;
+  }
+
+  #select-country{
+    font-size: 20px;
+  }
+
+  form{
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1140px){
+  .seven{
+    flex-basis: 45%;
+  }
+  .city_title{
+    flex-basis: 50%;
+  }
+
+  .average_pressure{
+    padding-right: 3em;
+  }
+  .forecast_wrap{
+    width: 80%;
+  }
+.weather{
+  flex-basis: 40%
+}
 }
