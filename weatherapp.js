@@ -29,7 +29,6 @@ function listenForCountrySelect(){
     }
 
   })
-
 }
 
 function listenForFormSubmit(){
@@ -40,7 +39,13 @@ function handleSubmit(e){
   e.preventDefault();
   reset()
   citySelected = $(".input_text")[0].value;
-  getWeather(citySelected,countrySelected);
+
+  if(citySelected === ''){
+    alert('Please enter a city')
+  }
+  else{
+    getWeather(citySelected,countrySelected);
+      }
 }
 
 function getWeather(city,country){
@@ -72,7 +77,8 @@ var forecastInfo = []
       morning: Math.round(weather.list[i].temp.morn),
       afternoon: Math.round(weather.list[i].temp.day),
       evening: Math.round(weather.list[i].temp.eve),
-      overnight: Math.round(weather.list[i].temp.night)
+      overnight: Math.round(weather.list[i].temp.night),
+      time: weather.list[i].dt
     }
     forecastInfo.push(day);
   }
@@ -83,46 +89,51 @@ showForecast(cityName,countryName,forecastInfo)
 function showForecast(city,country,forecast){
 
   var d = new Date()
-  var date = d.getDate()
+  // var date = d.getDate()
   var month = d.getMonth() + 1;
-  var jour = d.getDay()
+  // var jour = d.getDay()
   var sevenday = $('<h2>').addClass('seven').appendTo('.city_info').text('7 Day Forcast');
   var $cityName = $('<h2>').addClass('city_title').appendTo('.city_info').text(city +','+ country);
 
-    for(i=0; i<forecast.length;i++){
-        var $day = $('<li>').addClass('day_weather').appendTo('.forecast_list')
+forecast.forEach(function(cast){
 
-        var temp = weekdayCounter(jour,i)
+  var $day = $('<li>').addClass('day_weather').appendTo('.forecast_list')
 
-        var $dateWrap = $('<div>').addClass('date_wrap').appendTo($day)
-        var $jour = $('<p>').appendTo($dateWrap).text(weekday[temp])
-        var $date = $('<p>').appendTo($dateWrap).text(month +'/'+ (date+i))
+  //var temp = weekdayCounter(jour,i)
+  var temp = dateStamp(cast.time)
 
-        var $weatherWrap = $('<div>').addClass('weather').appendTo($day)
-        var $image = $('<img>').attr('src','http://openweathermap.org/img/w/'+ forecast[i].icon +'.png').addClass("weather_image").appendTo($weatherWrap);
+  console.log(temp)
 
-        var $tempWrap = $('<div>').addClass('temp_wrap').appendTo($weatherWrap)
-        var $high = $('<p>').addClass('high').appendTo($tempWrap).text(forecast[i].dayHigh+'°C')
-        var $low = $('<p>').addClass('low').appendTo($tempWrap).text(forecast[i].dayLow+'°C')
-        var $description = $('<p>').addClass('weather_description').appendTo($tempWrap).text(forecast[i].description)
+  var $dateWrap = $('<div>').addClass('date_wrap').appendTo($day)
+  var $jour = $('<p>').appendTo($dateWrap).text(temp[0])
+  var $date = $('<p>').appendTo($dateWrap).text(month +'/'+ temp[1])
 
-        var $atmosphere = $('<div>').addClass('atmosphere').appendTo($day)
-        var $pressure = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].pressure +' hPa')
-        var $humidity = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(forecast[i].humidity +'%')
+  var $weatherWrap = $('<div>').addClass('weather').appendTo($day)
+  var $image = $('<img>').attr('src','http://openweathermap.org/img/w/'+ cast.icon +'.png').addClass("weather_image").appendTo($weatherWrap);
 
-      /// adding more details
+  var $tempWrap = $('<div>').addClass('temp_wrap').appendTo($weatherWrap)
+  var $high = $('<p>').addClass('high').appendTo($tempWrap).text(cast.dayHigh+'°C')
+  var $low = $('<p>').addClass('low').appendTo($tempWrap).text(cast.dayLow+'°C')
+  var $description = $('<p>').addClass('weather_description').appendTo($tempWrap).text(cast.description)
 
-        var $details = $('<div>').addClass('details').appendTo($day)
+  var $atmosphere = $('<div>').addClass('atmosphere').appendTo($day)
+  var $pressure = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text(cast.pressure +' hPa')
+  var $humidity = $('<p>').addClass('atmosphere_text').appendTo($atmosphere).text('Humidity '+cast.humidity +'%')
 
-      //var $detail_child = $('<div>').addClass('detail_child').appendTo($details)
+/// adding more details
 
-        var $morning = $('<p>').addClass('day_temp').appendTo($details).text('Morn ' + forecast[i].morning+'°C')
-        var $afternoon = $('<p>').addClass('day_temp').appendTo($details).text('Day ' + forecast[i].afternoon+'°C')
-        var $evening = $('<p>').addClass('day_temp').appendTo($details).text('Eve ' + forecast[i].evening+'°C')
-        var $overnight = $('<p>').addClass('day_temp').appendTo($details).text('Night ' + forecast[i].overnight+'°C')
+  var $details = $('<div>').addClass('details').appendTo($day)
 
-    }
+//var $detail_child = $('<div>').addClass('detail_child').appendTo($details)
+
+  var $morning = $('<p>').addClass('day_temp').appendTo($details).text('Morn ' + cast.morning+'°C')
+  var $afternoon = $('<p>').addClass('day_temp').appendTo($details).text('Day ' + cast.afternoon+'°C')
+  var $evening = $('<p>').addClass('day_temp').appendTo($details).text('Eve ' + cast.evening+'°C')
+  var $overnight = $('<p>').addClass('day_temp').appendTo($details).text('Night ' + cast.overnight+'°C')
+})
+  
       var $averagePressure = $('<h3>').addClass('average_pressure').appendTo('.city_info').text("Average Weekly Pressure "+averageWeeklyPressure(forecast)+' hPa');
+      $('.day_weather:first-child').addClass('selected').find(".details").slideDown()
 }
 
 function weekdayCounter(day,count){
@@ -155,4 +166,15 @@ function averageWeeklyPressure(forecast){
     x++
   }
   return Math.round(pressure / 7)
+}
+
+function dateStamp(date){
+  var myDate = new Date(date *1000);
+
+  var timeOfDataForecasted = myDate.toGMTString()
+  var result = timeOfDataForecasted.split(',');
+
+  var res = result[1].slice(1,3)
+
+  return [result[0],res]
 }
